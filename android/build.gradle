@@ -8,7 +8,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.5.3'
+    classpath 'com.android.tools.build:gradle:3.5.4'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
@@ -136,7 +136,10 @@ dependencies {
   // From node_modules
 
   // DJI SDK
-  implementation ('com.dji:dji-sdk:4.12')
+  implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+  implementation ('com.dji:dji-sdk:4.12') {
+    exclude module: 'library-anti-distortion'
+  }
   compileOnly ('com.dji:dji-sdk-provided:4.12')
 }
 

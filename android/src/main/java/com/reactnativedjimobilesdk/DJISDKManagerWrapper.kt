@@ -19,7 +19,7 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
 
   @ReactMethod
   fun registerApp(promise: Promise) {
-    // TODO Check if already registrating an APP
+    // TODO Check if already registering an APP
     val sdkManager = DJISDKManager.getInstance()
     sdkManager.registerApp(reactApplicationContext,
       object: DJISDKManager.SDKManagerCallback {

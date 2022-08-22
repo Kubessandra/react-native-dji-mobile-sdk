@@ -6,7 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
-const DjiMobileSdk = NativeModules.DjiMobileSdk  ? NativeModules.DjiMobileSdk  : new Proxy(
+const DJISDKManagerWrapper = NativeModules.DJISDKManagerWrapper  ? NativeModules.DJISDKManagerWrapper  : new Proxy(
       {},
       {
         get() {
@@ -40,13 +40,13 @@ class DJISDKManager {
           throw new Error(`Permission not granted for ${key}`);
         }
       })
-      DjiMobileSdk.registerApp();
+      DJISDKManagerWrapper.registerApp();
     }
   }
 }
 
 export function multiply(a: number, b: number): Promise<number> {
-  return DjiMobileSdk.multiply(a, b);
+  return DJISDKManagerWrapper.multiply(a, b);
 }
 
 export default DJISDKManager
