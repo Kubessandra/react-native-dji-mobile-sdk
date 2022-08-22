@@ -130,10 +130,14 @@ repositories {
 def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
-    //noinspection GradleDynamicVersion
+  //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-// From node_modules
+  // From node_modules
+
+  // DJI SDK
+  implementation ('com.dji:dji-sdk:4.12')
+  compileOnly ('com.dji:dji-sdk-provided:4.12')
 }
 
 if (isNewArchitectureEnabled()) {
