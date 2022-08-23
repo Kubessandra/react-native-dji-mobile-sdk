@@ -1,4 +1,9 @@
-import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
+import {
+  NativeEventEmitter,
+  NativeModules,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
 
 const LINKING_ERROR =
   `The package 'react-native-dji-mobile-sdk' doesn't seem to be linked. Make sure: \n\n` +
@@ -6,17 +11,14 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo managed workflow\n';
 
-const DJISDKManagerWrapper = NativeModules.DJISDKManagerWrapper  ? NativeModules.DJISDKManagerWrapper  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
-  
+const { DJISDKManagerWrapper, ReactEventEmitter } = NativeModules;
+
+if (!DJISDKManagerWrapper || !ReactEventEmitter) {
+  throw new Error(LINKING_ERROR);
+}
+
 class DJISDKManager {
-  SDKRegistered = false
+  SDKRegistered = false;
 
   registerApp = async () => {
     if (Platform.OS === 'android') {
@@ -36,17 +38,24 @@ class DJISDKManager {
         PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE!,
       ]);
       Object.entries(granted).map(([key, values]) => {
-        if (values !== 'granted' ) {
+        if (values !== 'granted') {
           throw new Error(`Permission not granted for ${key}`);
         }
-      })
+      });
       DJISDKManagerWrapper.registerApp();
     }
-  }
+  };
 }
+
+const sendTestEvent = () => {
+  DJISDKManagerWrapper.testEvent();
+};
+
+let eventEmitter = new NativeEventEmitter(ReactEventEmitter);
+const getDJISDKEventEmitter = () => eventEmitter;
 
 export function multiply(a: number, b: number): Promise<number> {
   return DJISDKManagerWrapper.multiply(a, b);
 }
 
-export default DJISDKManager
+export { sendTestEvent, getDJISDKEventEmitter, DJISDKManager };

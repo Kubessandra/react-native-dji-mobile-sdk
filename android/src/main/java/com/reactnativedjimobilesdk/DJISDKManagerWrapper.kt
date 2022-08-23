@@ -18,6 +18,12 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
   }
 
   @ReactMethod
+  fun testEvent(promise: Promise) {
+    reactEventEmitter.sendEvent(ReactEventEmitter.Event.PRODUCT_CONNECTED, null)
+    promise.resolve("Success")
+  }
+
+  @ReactMethod
   fun registerApp(promise: Promise) {
     // TODO Check if already registering an APP
     val sdkManager = DJISDKManager.getInstance()
@@ -33,13 +39,11 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
         }
 
         override fun onProductDisconnect() {
-          // TODO SEND EVENT TO REACT
           Log.i(TAG, "Product disconnected")
           reactEventEmitter.sendEvent(ReactEventEmitter.Event.PRODUCT_DISCONNECTED, null)
         }
 
         override fun onProductConnect(baseProduct: BaseProduct?) {
-          // TODO SEND EVENT TO REACT
           Log.i(TAG, "Product connected")
           reactEventEmitter.sendEvent(ReactEventEmitter.Event.PRODUCT_CONNECTED, null)
         }

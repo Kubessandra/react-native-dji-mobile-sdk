@@ -6,10 +6,11 @@ import com.facebook.react.uimanager.ViewManager
 
 
 class DJIMobileSdkPackage : ReactPackage {
-    override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+    override fun createNativeModules(reactContext: ReactApplicationContext): MutableList<NativeModule> {
         return listOf(
           DJISDKManagerWrapper(reactContext),
-        )
+          ReactEventEmitter(reactContext),
+        ).toMutableList()
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {

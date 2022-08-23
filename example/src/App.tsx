@@ -1,31 +1,41 @@
-import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from 'react-native-dji-mobile-sdk';
+import React, { useEffect } from 'react';
+import Toast from 'react-native-toast-message';
+import { Button, Text, View } from 'react-native';
+import {
+  getDJISDKEventEmitter,
+  sendTestEvent,
+} from 'react-native-dji-mobile-sdk';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  useEffect(() => {
+    const eventEmitter = getDJISDKEventEmitter();
+    const subscribe = eventEmitter.addListener('*', (event: any) => {
+      console.log(event);
+      Toast.show({
+        text1: 'Event ALL received',
+      });
+    });
+    const subscribe2 = eventEmitter.addListener(
+      'PRODUCT_CONNECTED',
+      (event: any) => {
+        console.log(event);
+        Toast.show({
+          text1: 'Event received',
+        });
+      }
+    );
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+    return () => {
+      subscribe.remove();
+      subscribe2.remove();
+    };
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
+    <View>
+      <Text>Result</Text>
+      <Button onPress={sendTestEvent} title="Click to send" />
+      <Toast />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
