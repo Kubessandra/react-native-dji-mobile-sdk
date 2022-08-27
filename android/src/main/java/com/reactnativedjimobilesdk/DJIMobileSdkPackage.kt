@@ -9,6 +9,7 @@ class DJIMobileSdkPackage : ReactPackage {
     override fun createNativeModules(reactContext: ReactApplicationContext): MutableList<NativeModule> {
         return listOf(
           DJISDKManagerWrapper(reactContext),
+          DJISDKAircraftWrapper(reactContext),
           ReactEventEmitter(reactContext),
         ).toMutableList()
     }

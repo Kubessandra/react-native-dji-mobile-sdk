@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
-import { Button, Text, View } from 'react-native';
-import {
-  getDJISDKEventEmitter,
-  sendTestEvent,
-} from 'react-native-dji-mobile-sdk';
+import { Text, View } from 'react-native';
+import { getDJISDKEventEmitter } from 'react-native-dji-mobile-sdk';
 
 export default function App() {
   useEffect(() => {
@@ -34,7 +31,6 @@ export default function App() {
   return (
     <View>
       <Text>Result</Text>
-      <Button onPress={sendTestEvent} title="Click to send" />
       <Toast />
     </View>
   );

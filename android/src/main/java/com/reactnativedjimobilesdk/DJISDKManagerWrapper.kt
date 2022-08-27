@@ -18,12 +18,6 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
   }
 
   @ReactMethod
-  fun testEvent(promise: Promise) {
-    reactEventEmitter.sendEvent(ReactEventEmitter.Event.PRODUCT_CONNECTED, null)
-    promise.resolve("Success")
-  }
-
-  @ReactMethod
   fun registerApp(promise: Promise) {
     // TODO Check if already registering an APP
     val sdkManager = DJISDKManager.getInstance()
@@ -64,10 +58,5 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
           TODO("Not yet implemented")
         }
       })
-  }
-
-  @ReactMethod
-  fun multiply(a: Int, b: Int, promise: Promise) {
-    promise.resolve(a * b)
   }
 }
