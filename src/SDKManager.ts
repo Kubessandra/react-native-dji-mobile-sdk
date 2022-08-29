@@ -14,18 +14,17 @@ export class SDKManager {
 
   registerApp = async () => {
     if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.requestMultiple([
-        PermissionsAndroid.PERMISSIONS.VIBRATE!,
-        PermissionsAndroid.PERMISSIONS.INTERNET!,
-        PermissionsAndroid.PERMISSIONS.ACCESS_WIFI_STATE!,
-        PermissionsAndroid.PERMISSIONS.WAKE_LOCK!,
+      console.log([
         PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION!,
-        PermissionsAndroid.PERMISSIONS.ACCESS_NETWORK_STATE!,
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION!,
-        PermissionsAndroid.PERMISSIONS.CHANGE_WIFI_STATE!,
         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE!,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH!,
-        PermissionsAndroid.PERMISSIONS.BLUETOOTH_ADMIN!,
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE!,
+        PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE!,
+      ]);
+      const granted = await PermissionsAndroid.requestMultiple([
+        PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION!,
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION!,
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE!,
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE!,
         PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE!,
       ]);

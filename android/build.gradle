@@ -35,6 +35,7 @@ def getExtOrIntegerDefault(name) {
 
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
+  useLibrary 'org.apache.http.legacy'
 
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault('minSdkVersion')
@@ -136,11 +137,13 @@ dependencies {
   // From node_modules
 
   // DJI SDK
+  implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
   implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-  implementation ('com.dji:dji-sdk:4.12') {
+
+  implementation ('com.dji:dji-sdk:4.16.2') {
     exclude module: 'library-anti-distortion'
   }
-  compileOnly ('com.dji:dji-sdk-provided:4.12')
+  compileOnly ('com.dji:dji-sdk-provided:4.16.2')
 }
 
 if (isNewArchitectureEnabled()) {

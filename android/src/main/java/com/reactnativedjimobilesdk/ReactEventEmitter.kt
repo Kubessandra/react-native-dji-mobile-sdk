@@ -6,6 +6,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 
 class ReactEventEmitter(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   enum class Event(val eventName: String) {
+    REGISTRATION_SUCCESS("REGISTRATION_SUCCESS"),
     PRODUCT_CONNECTED("PRODUCT_CONNECTED"),
     PRODUCT_DISCONNECTED("PRODUCT_DISCONNECTED");
 
