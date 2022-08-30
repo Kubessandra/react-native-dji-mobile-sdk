@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Uncomment all this block rename the file  and add your API KEY -->
+  <!-- <string name="djiApiKey">Your API Key(Do not forget to rename this file -> apiKey.xml)</string> -->
+</resources>

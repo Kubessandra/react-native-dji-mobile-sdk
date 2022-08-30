@@ -2,6 +2,24 @@
 
 We want this community to be friendly and respectful to each other. Please follow it in all your interactions with the project.
 
+## Setup
+
+[How to generate your api key](https://developer.dji.com/document/2e5ae092-b0fa-4cbd-abe2-956f44253c12#generate-an-app-key)
+Add your SDK Api key to the test example:
+
+- In `example/android/app/src/main/res/values/` rename `apiKey.example.xml` -> `apiKey.xml`
+- Uncomment the ligne number `4`
+- Add your API KEY to the file.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Uncomment all this block rename the file  and add your API KEY -->
+  <!-- <string name="djiApiKey">Your API Key(Do not forget to rename this file -> apiKey.xml)</string> -->
+</resources>
+```
+
+
 ## Development workflow
 
 To get started with the project, run `yarn` in the root directory to install the required dependencies for each package:

@@ -37,6 +37,33 @@ android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
   useLibrary 'org.apache.http.legacy'
 
+  packagingOptions {
+    doNotStrip "*/*/libdjivideo.so"
+    doNotStrip "*/*/libSDKRelativeJNI.so"
+    doNotStrip "*/*/libFlyForbid.so"
+    doNotStrip "*/*/libduml_vision_bokeh.so"
+    doNotStrip "*/*/libyuv2.so"
+    doNotStrip "*/*/libGroudStation.so"
+    doNotStrip "*/*/libFRCorkscrew.so"
+    doNotStrip "*/*/libUpgradeVerify.so"
+    doNotStrip "*/*/libFR.so"
+    doNotStrip "*/*/libDJIFlySafeCore.so"
+    doNotStrip "*/*/libdjifs_jni.so"
+    doNotStrip "*/*/libsfjni.so"
+    doNotStrip "*/*/libDJICommonJNI.so"
+    doNotStrip "*/*/libDJICSDKCommon.so"
+    doNotStrip "*/*/libDJIUpgradeCore.so"
+    doNotStrip "*/*/libDJIUpgradeJNI.so"
+    doNotStrip "*/*/libDJIWaypointV2Core.so"
+    doNotStrip "*/*/libAMapSDK_MAP_v6_9_2.so"
+    doNotStrip "*/*/libDJIMOP.so"
+    doNotStrip "*/*/libDJISDKLOGJNI.so"
+    exclude('META-INF/rxjava.properties')
+    exclude('assets/location_map_gps_locked.png')
+    exclude('assets/location_map_gps_3d.png')
+  }
+
+
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault('minSdkVersion')
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
