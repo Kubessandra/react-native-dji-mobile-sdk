@@ -12,7 +12,7 @@ export class SDKManager {
   SDKRegistered = false;
   #drone: SDKDrone | undefined;
 
-  registerApp = async () => {
+  connectProduct = async () => {
     if (Platform.OS === 'android') {
       console.log([
         PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION!,
@@ -33,7 +33,12 @@ export class SDKManager {
           throw new Error(`Permission not granted for ${key}`);
         }
       });
-      await DJISDKManagerWrapper.registerApp();
+      const timeoutConnect = setTimeout(() => {
+        throw new Error('Timeout connecting to product app DJI SDK');
+      }, 10000);
+      await DJISDKManagerWrapper.connectProduct();
+      this.SDKRegistered = true;
+      clearTimeout(timeoutConnect);
       this.#drone = new SDKDrone();
     }
   };

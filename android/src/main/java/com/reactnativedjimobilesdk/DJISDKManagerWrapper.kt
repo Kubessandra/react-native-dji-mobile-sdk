@@ -1,4 +1,5 @@
 package com.reactnativedjimobilesdk
+import android.app.AlertDialog
 import android.util.Log
 import com.facebook.react.bridge.*
 import com.secneo.sdk.Helper
@@ -20,7 +21,7 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
   }
 
   @ReactMethod
-  fun registerApp(promise: Promise) {
+  fun connectProduct(promise: Promise) {
     // NEED TO BE CALL FIRST BEFORE ALLLLLLLL
     // TODO Call it just after constructor
     Helper.install(currentActivity?.application)
@@ -31,9 +32,8 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
         object : DJISDKManager.SDKManagerCallback {
           override fun onRegister(djiError: DJIError?) {
             if (djiError == DJISDKError.REGISTRATION_SUCCESS) {
-              promise.resolve("[REACT-DJI] Registration Successful");
               reactEventEmitter.sendEvent(ReactEventEmitter.Event.REGISTRATION_SUCCESS, null)
-//            sdkManager.startConnectionToProduct();
+              sdkManager.startConnectionToProduct();
             } else {
               Log.e(TAG, "Fail Register")
               promise.reject(djiError.toString(), djiError?.description);
@@ -48,6 +48,7 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
           override fun onProductConnect(baseProduct: BaseProduct?) {
             Log.i(TAG, "Product connected")
             reactEventEmitter.sendEvent(ReactEventEmitter.Event.PRODUCT_CONNECTED, null)
+            promise.resolve("[REACT-DJI] Product Connected successfully");
           }
 
           override fun onProductChanged(p0: BaseProduct?) {
