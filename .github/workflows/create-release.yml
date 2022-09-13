@@ -1,10 +1,9 @@
-name: Create Release
-
-on: 
+on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
+name: Create Release
 jobs:
   publish:
     name: Publish to npm
@@ -16,7 +15,26 @@ jobs:
           node-version: '16'
       - name: Publish
         run: |
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           yarn
-          yarn release
+          yarn typescript
+          yarn prepare
+          npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  create-github-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Create Release Notes
+        uses: actions/github-script@v4.0.2
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            await github.request(`POST /repos/${{ github.repository }}/releases`, {
+              tag_name: "${{ github.ref }}",
+            });
