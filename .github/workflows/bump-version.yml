@@ -41,7 +41,7 @@ jobs:
         git config user.name '${{secrets.MAINTAINER_NAME}}'
         git config user.email '${{secrets.MAINTAINER_EMAIL}}'
     - name: bump version
-      run: npm version patch
+      run: npm version patch -m "[skip ci] upgrade package to %s"
 
     - name: Push latest version
       run: git push origin main --follow-tags
