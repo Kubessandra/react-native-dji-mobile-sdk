@@ -22,17 +22,11 @@ class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContex
   }
 
   @ReactMethod
-  fun getDroneModel(promise: Promise) {
+  fun getModel(promise: Promise) {
     try {
       val aircraft = retrieveAircraft()
-      aircraft.getName(object: CommonCallbacks.CompletionCallbackWith<String> {
-        override fun onSuccess(modelName: String?) {
-          promise.resolve(modelName)
-        }
-        override fun onFailure(error: DJIError?) {
-          promise.reject(error.toString(), error?.description)
-        }
-      })
+      val model = aircraft.model
+      promise.resolve(model.displayName)
     } catch (e: Exception) {
       promise.reject(e.toString(), e.message)
     }
@@ -49,7 +43,7 @@ class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContex
   }
 
   @ReactMethod
-  fun getDroneID(promise: Promise) {
+  fun getSerialNumber(promise: Promise) {
     try {
       val aircraft = retrieveAircraft()
       aircraft.flightController.getSerialNumber(object: CommonCallbacks.CompletionCallbackWith<String> {
@@ -61,6 +55,38 @@ class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContex
           promise.reject(error.toString(), error?.description)
         }
       })
+    } catch (e: Exception) {
+      promise.reject(e.toString(), e.message)
+    }
+  }
+
+  @ReactMethod
+  fun startTakeOff(promise: Promise) {
+    try {
+      val aircraft = retrieveAircraft()
+      aircraft.flightController.startTakeoff {
+        if (it == null) {
+          promise.resolve("Start Take off")
+        } else {
+          promise.reject(it.errorCode.toString(), it.description)
+        }
+      }
+    } catch (e: Exception) {
+      promise.reject(e.toString(), e.message)
+    }
+  }
+
+  @ReactMethod
+  fun startLanding(promise: Promise) {
+    try {
+      val aircraft = retrieveAircraft()
+      aircraft.flightController.startLanding {
+        if (it == null) {
+          promise.resolve("Start Landing")
+        } else {
+          promise.reject(it.errorCode.toString(), it.description)
+        }
+      }
     } catch (e: Exception) {
       promise.reject(e.toString(), e.message)
     }

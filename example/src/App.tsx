@@ -1,63 +1,40 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Button, Text, View } from 'react-native';
-import { getDJISDKEventEmitter, sdkManager } from 'react-native-dji-mobile-sdk';
+import { sdkManager } from 'react-native-dji-mobile-sdk';
 import type { SDKDrone } from 'lib/typescript';
+import { useSDKEventListeners } from './useSDKEventListeners';
 
 export default function App() {
   const [drone, setDrone] = useState<SDKDrone | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [droneModel, setDroneModel] = useState('');
   const [droneID, setDroneID] = useState('');
+  useSDKEventListeners();
 
-  const registrationCB = () => {
-    sdkManager
-      .connectProduct()
-      .then(async () => {
-        console.log('connect success');
-        const newDrone = await sdkManager.getDrone();
-        setDrone(newDrone);
-      })
-      .catch((error: any) => {
-        Toast.show({
-          text1: 'Connection Failed',
-        });
-        console.error('connect error', error);
+  const initDrone = async () => {
+    try {
+      await sdkManager.registerApp();
+      console.log('Registration success');
+      await sdkManager.startConnectionToProduct();
+      console.log('Connection success');
+      const newDrone = await sdkManager.getProduct();
+      setDrone(newDrone);
+    } catch (e) {
+      Toast.show({
+        text1: 'Connection Failed',
       });
+      console.error('connect error', e);
+    }
   };
-
-  useEffect(() => {
-    const eventEmitter = getDJISDKEventEmitter();
-    const subscribe = eventEmitter.addListener(
-      'REGISTRATION_SUCCESS',
-      (event: any) => {
-        console.log(event);
-        Toast.show({
-          text1: 'Registration success',
-        });
-      }
-    );
-    eventEmitter.addListener('PRODUCT_CONNECTED', (event: any) => {
-      console.log(event);
-      Toast.show({
-        text1: 'Product connect',
-      });
-    });
-    eventEmitter.addListener('PRODUCT_DISCONNECTED', (event: any) => {
-      console.log(event);
-      Toast.show({
-        text1: 'Product disconnect',
-      });
-    });
-    return () => {
-      subscribe.remove();
-    };
-  }, []);
 
   useEffect(() => {
     if (drone) {
       const cb = async () => {
         const connected = await drone.isConnected();
-        const newDroneID = await drone.getID();
+        const newDroneID = await drone.getSerialNumber();
+        setDroneModel(await drone.getModel());
         setIsConnected(connected);
         setDroneID(newDroneID);
       };
@@ -91,10 +68,29 @@ export default function App() {
           <>
             <Text>Is Connected {String(isConnected)}</Text>
             <Text>DroneID {droneID}</Text>
+            <Text>DroneModel {droneModel}</Text>
           </>
         )}
       </View>
-      <Button title="Refresh registration" onPress={registrationCB} />
+      {drone && (
+        <>
+          <View
+            style={{
+              margin: 8,
+            }}
+          >
+            <Button
+              color="green"
+              title="TakeOFF"
+              onPress={drone.startTakeOff}
+            />
+          </View>
+          <View style={{ margin: 8, marginBottom: 20 }}>
+            <Button color="red" title="Landing" onPress={drone.startLanding} />
+          </View>
+        </>
+      )}
+      {!drone && <Button title="Refresh registration" onPress={initDrone} />}
       <Toast />
     </View>
   );

@@ -1,6 +1,7 @@
 import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
 import { LINKING_ERROR } from './constant';
-import { SDKDrone } from './SDKDrone';
+import { SDKAircraft } from './SDKAircraft';
+import { onceProductConnected } from './utils';
 
 const { DJISDKManagerWrapper } = NativeModules;
 
@@ -10,9 +11,25 @@ if (!DJISDKManagerWrapper) {
 
 export class SDKManager {
   SDKRegistered = false;
-  #drone: SDKDrone | undefined;
+  #product: SDKAircraft | undefined;
 
-  connectProduct = async () => {
+  startConnectionToProduct = async (): Promise<void> => {
+    return new Promise(async (resolve, reject) => {
+      let connectTO: NodeJS.Timeout;
+      const sub = onceProductConnected(() => {
+        this.#product = new SDKAircraft();
+        clearTimeout(connectTO);
+        resolve();
+      });
+      connectTO = setTimeout(() => {
+        reject(new Error('Connection Product timeout'));
+        sub.remove();
+      }, 10000);
+      await DJISDKManagerWrapper.startConnectionToProduct();
+    });
+  };
+
+  registerApp = async () => {
     if (Platform.OS === 'android') {
       console.log([
         PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION!,
@@ -33,20 +50,18 @@ export class SDKManager {
           throw new Error(`Permission not granted for ${key}`);
         }
       });
-      const timeoutConnect = setTimeout(() => {
-        throw new Error('Timeout connecting to product app DJI SDK');
-      }, 10000);
-      await DJISDKManagerWrapper.connectProduct();
+      await DJISDKManagerWrapper.registerApp();
       this.SDKRegistered = true;
-      clearTimeout(timeoutConnect);
-      this.#drone = new SDKDrone();
     }
   };
 
-  getDrone = async () => {
-    if (!this.#drone || !this.SDKRegistered) {
-      throw new Error('Drone not registered');
+  getProduct = async () => {
+    if (!this.SDKRegistered) {
+      throw new Error('SDK not registered');
     }
-    return this.#drone;
+    if (!this.#product) {
+      throw new Error('Product not registered');
+    }
+    return this.#product;
   };
 }

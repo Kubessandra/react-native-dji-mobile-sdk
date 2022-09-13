@@ -63,12 +63,16 @@ android {
     exclude('assets/location_map_gps_3d.png')
   }
 
-
   defaultConfig {
     minSdkVersion getExtOrIntegerDefault('minSdkVersion')
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
     buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
-    multiDexEnabled = true
+    multiDexEnabled true
+    ndk {
+        // On x86 devices that run Android API 23 or above, if the application is targeted with API 23 or
+        // above, FFmpeg lib might lead to runtime crashes or warnings.
+        abiFilters 'armeabi-v7a', 'arm64-v8a'
+    }
   }
 
   buildTypes {
