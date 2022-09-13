@@ -4,6 +4,8 @@ on: [push, pull_request]
 
 jobs:
   build:
+    if: "!contains(github.event.head_commit.message, '[no-build-run]')"
+
     runs-on: ubuntu-latest
 
     strategy:
