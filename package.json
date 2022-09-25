@@ -1,6 +1,6 @@
 {
   "name": "react-native-dji-mobile-sdk",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
