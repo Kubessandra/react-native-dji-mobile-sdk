@@ -13,6 +13,7 @@
     "android",
     "ios",
     "cpp",
+    "app.plugin.js",
     "react-native-dji-mobile-sdk.podspec",
     "!lib/typescript/example",
     "!android/build",
