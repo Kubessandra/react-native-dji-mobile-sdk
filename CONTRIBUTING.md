@@ -127,6 +127,11 @@ When you're sending a pull request:
 - Follow the pull request template when opening a pull request.
 - For pull requests that change the API or implementation, discuss with maintainers first by opening an issue.
 
+### Known issues in the package:
+
+1. If you have an error like this `Process: com.example.reactnativedjimobilesdk, PID: 15122
+    java.lang.NoClassDefFoundError: Failed resolution of: Ldji/sdk/sdkmanager/DJISDKManager;` you need to run the Helper before requesting anything
+
 ## Code of Conduct
 
 ### Our Pledge

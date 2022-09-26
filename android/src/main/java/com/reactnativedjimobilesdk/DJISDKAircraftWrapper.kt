@@ -6,12 +6,20 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import dji.common.error.DJIError
 import dji.common.util.CommonCallbacks
+import dji.sdk.camera.Camera
 import dji.sdk.products.Aircraft
 import dji.sdk.sdkmanager.DJISDKManager
 
 class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   override fun getName(): String {
     return "DJISDKAircraftWrapper"
+  }
+
+  companion object {
+    fun getCameraInstance(): Camera? {
+      val product = DJISDKManager.getInstance().product ?: return null
+      return product.camera
+    }
   }
 
   private fun retrieveAircraft(): Aircraft {

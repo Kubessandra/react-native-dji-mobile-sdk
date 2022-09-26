@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Toast from 'react-native-toast-message';
 import { Button, Text, View } from 'react-native';
-import { sdkManager } from 'react-native-dji-mobile-sdk';
+import { DJIVideoView, sdkManager } from 'react-native-dji-mobile-sdk';
 import type { SDKDrone } from 'lib/typescript';
 import { useSDKEventListeners } from './useSDKEventListeners';
 
@@ -74,6 +74,22 @@ export default function App() {
       </View>
       {drone && (
         <>
+          <View
+            style={{
+              width: '100%',
+              height: '60%',
+            }}
+          >
+            <>
+              <Text>{JSON.stringify(DJIVideoView, null, 2)}</Text>
+              <DJIVideoView style={{
+                // TODO - this is a hack to get the video to show up
+                // Need to find a a better way to do this
+                width: 200,
+                height: 200,
+              }} />
+            </>
+          </View>
           <View
             style={{
               margin: 8,
