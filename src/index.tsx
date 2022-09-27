@@ -1,9 +1,8 @@
-import { SDKManager } from './SDKManager';
 import { getDJISDKEventEmitter } from './SDKEventEmitter';
 
-const sdkManager = new SDKManager();
-
-export { getDJISDKEventEmitter, sdkManager };
+// Libs
+export { sdkManager } from './SDKManager';
+export { getDJISDKEventEmitter };
 
 // Components
 export { DJIVideoView } from './components/DJIVideoView';

@@ -65,3 +65,5 @@ export class SDKManager {
     return this.#product;
   };
 }
+
+export const sdkManager = new SDKManager();
