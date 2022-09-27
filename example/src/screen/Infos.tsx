@@ -27,10 +27,10 @@ const Infos = (props: InfosProps) => {
   }, [drone]);
 
   return (
-    <View>
+    <View style={{ flex: 1, alignItems: 'center' }}>
       <Text
         style={{
-          marginBottom: 16,
+          margin: 16,
         }}
       >
         Drone Infos

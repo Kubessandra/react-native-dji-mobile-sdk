@@ -12,6 +12,8 @@ const Camera = () => {
       style={{
         flex: 1,
         flexDirection: landscape ? 'column' : 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       <DJIVideoView

@@ -2,8 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Button, View } from 'react-native';
 import type { SDKDrone } from 'react-native-dji-mobile-sdk';
-import Control from './Control';
-import Infos from './Infos';
 import Registration from '../components/Registration';
 
 interface HomeProps {
@@ -13,7 +11,7 @@ interface HomeProps {
 
 const Home = (props: HomeProps) => {
   const navigation = useNavigation<any>();
-  const { drone, onDroneConnected } = props;
+  const { onDroneConnected } = props;
 
   return (
     <View
@@ -21,8 +19,6 @@ const Home = (props: HomeProps) => {
         flex: 1,
       }}
     >
-      {drone && <Infos drone={drone} />}
-      {drone && <Control drone={drone} />}
       <View
         style={{
           flex: 1,
