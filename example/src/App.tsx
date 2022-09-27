@@ -1,97 +1,52 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useState } from 'react';
-import Toast from 'react-native-toast-message';
-import { Button, Text, View } from 'react-native';
-import { sdkManager } from 'react-native-dji-mobile-sdk';
-import type { SDKDrone } from 'lib/typescript';
+import React, { useCallback, useState } from 'react';
+
 import { useSDKEventListeners } from './useSDKEventListeners';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { SDKDrone } from 'react-native-dji-mobile-sdk';
+import Home from './screen/Home';
+import Camera from './screen/Camera';
+import Toast from 'react-native-toast-message';
+import Control from './screen/Control';
+import { Text } from 'react-native';
+import Infos from './screen/Infos';
+
+type RootStackParamList = {
+  Home: undefined;
+  DroneCam: undefined;
+  Control: undefined;
+  Infos: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
   const [drone, setDrone] = useState<SDKDrone | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [droneModel, setDroneModel] = useState('');
-  const [droneID, setDroneID] = useState('');
   useSDKEventListeners();
 
-  const initDrone = async () => {
-    try {
-      await sdkManager.registerApp();
-      console.log('Registration success');
-      await sdkManager.startConnectionToProduct();
-      console.log('Connection success');
-      const newDrone = await sdkManager.getProduct();
-      setDrone(newDrone);
-    } catch (e) {
-      Toast.show({
-        text1: 'Connection Failed',
-      });
-      console.error('connect error', e);
-    }
-  };
+  const HomeNav = useCallback(() => {
+    return <Home drone={drone} onDroneConnected={setDrone} />;
+  }, [drone, setDrone]);
 
-  useEffect(() => {
-    if (drone) {
-      const cb = async () => {
-        const connected = await drone.isConnected();
-        const newDroneID = await drone.getSerialNumber();
-        setDroneModel(await drone.getModel());
-        setIsConnected(connected);
-        setDroneID(newDroneID);
-      };
-      cb();
-    }
+  const ControlNav = useCallback(() => {
+    if (!drone) return <Text>No Drone</Text>;
+    return <Control drone={drone} />;
+  }, [drone]);
+
+  const InfosNav = useCallback(() => {
+    if (!drone) return <Text>No Drone</Text>;
+    return <Infos drone={drone} />;
   }, [drone]);
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          margin: 8,
-          alignItems: 'center',
-        }}
-      >
-        <Text>Result</Text>
-        <Text
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          Drone Infos
-        </Text>
-        {drone && (
-          <>
-            <Text>Is Connected {String(isConnected)}</Text>
-            <Text>DroneID {droneID}</Text>
-            <Text>DroneModel {droneModel}</Text>
-          </>
-        )}
-      </View>
-      {drone && (
-        <>
-          <View
-            style={{
-              margin: 8,
-            }}
-          >
-            <Button
-              color="green"
-              title="TakeOFF"
-              onPress={drone.startTakeOff}
-            />
-          </View>
-          <View style={{ margin: 8, marginBottom: 20 }}>
-            <Button color="red" title="Landing" onPress={drone.startLanding} />
-          </View>
-        </>
-      )}
-      {!drone && <Button title="Refresh registration" onPress={initDrone} />}
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeNav} />
+        <Stack.Screen name="DroneCam" component={Camera} />
+        <Stack.Screen name="Control" component={ControlNav} />
+        <Stack.Screen name="Infos" component={InfosNav} />
+      </Stack.Navigator>
       <Toast />
-    </View>
+    </NavigationContainer>
   );
 }
