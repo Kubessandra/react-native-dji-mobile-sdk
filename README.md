@@ -1,4 +1,4 @@
-# **react-native-dji-mobile-sdk**
+# **react-native-dji-mobile-sdk [WIP]**
 Implementation of the dji mobile sdk for react native
 ## **Installation**
 
@@ -22,9 +22,27 @@ Add your API key to your manifest file: `android/app/src/main/AndroidManifest.xm
 </application>
 ```
 
-## Usage
+## **Usage**
 
+You can check the `/example` folder for a use of the package.
+
+### **API refs**
 ```js
+TODO
+```
+
+### **Components**
+
+### Render the video of the drone:
+```tsx
+<DJIVideoView
+  style={{
+    flex: 1,
+    aspectRatio: 16 / 9,
+    maxHeight: '100%',
+    maxWidth: '100%',
+  }}
+/>
 ```
 
 ## Contributing
