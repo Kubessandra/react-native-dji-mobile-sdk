@@ -8,6 +8,7 @@ class ReactEventEmitter(private val reactContext: ReactApplicationContext) : Rea
   enum class Event(val eventName: String) {
     REGISTRATION_SUCCESS("REGISTRATION_SUCCESS"),
     PRODUCT_CONNECTED("PRODUCT_CONNECTED"),
+    NEW_VIDEO_FRAME("NEW_VIDEO_FRAME"),
     PRODUCT_DISCONNECTED("PRODUCT_DISCONNECTED");
 
     companion object {
