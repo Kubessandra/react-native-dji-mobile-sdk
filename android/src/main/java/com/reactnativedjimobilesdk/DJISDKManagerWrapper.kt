@@ -14,7 +14,6 @@ const val TAG = "REACT-DJI"
 class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
   val reactEventEmitter = ReactEventEmitter(reactContext)
 
-
   override fun getName(): String {
     return "DJISDKManagerWrapper"
   }
