@@ -2,9 +2,10 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 import { LINKING_ERROR } from './constant';
 
 export interface EventList {
-  NEW_FRAME_VIDEO: {
+  NEW_VIDEO_FRAME: {
     bufferString: string;
     size: number;
+    id: string;
   };
   PRODUCT_CONNECTED: void;
   REGISTRATION_SUCCESS: void;

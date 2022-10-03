@@ -23,7 +23,7 @@ const useSDKEventListeners = () => {
         text1: 'Product disconnect',
       });
     });
-    eventEmitter.addListener('NEW_FRAME_VIDEO', (event) => {
+    eventEmitter.addListener('NEW_VIDEO_FRAME', (event) => {
       console.log('New video frame', event);
     });
     return () => {

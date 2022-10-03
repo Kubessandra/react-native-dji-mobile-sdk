@@ -1,6 +1,7 @@
 package com.reactnativedjimobilesdk.djiVideo
 
 import android.graphics.SurfaceTexture
+import android.util.Base64
 import android.util.Log
 import android.view.TextureView
 import android.view.View
@@ -15,20 +16,27 @@ import com.reactnativedjimobilesdk.TAG
 import com.reactnativedjimobilesdk.R
 import com.reactnativedjimobilesdk.ReactEventEmitter
 import com.secneo.sdk.Helper
+import java.util.*
 
 class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactApplicationContext): RelativeLayout(ctx), TextureView.SurfaceTextureListener {
+  companion object {
+    private var listenerSetup = false;
+  }
+
   private val reactEventEmitter = ReactEventEmitter(callerContext);
-  private val videoDataListener = VideoFeeder.VideoDataListener { bytes: ByteArray, i: Int ->
+  private val videoDataListener = VideoFeeder.VideoDataListener { bytes: ByteArray, size: Int ->
     Log.v(TAG, "Receive data from video listener")
     if (mCodecManager == null) {
       Log.e(TAG, "No codec manager available")
     }
     val params = Arguments.createMap().apply {
-      putString("bufferString", bytes.toString());
-      putInt("size", i)
+      val encodedString = Base64.encodeToString(bytes, 0, size, Base64.NO_WRAP)
+      val id = UUID.randomUUID().toString()
+      putString("bufferString", encodedString)
+      putInt("size", size)
     }
     reactEventEmitter.sendEvent(ReactEventEmitter.Event.NEW_VIDEO_FRAME, params);
-    mCodecManager?.sendDataToDecoder(bytes, i);
+    mCodecManager?.sendDataToDecoder(bytes, size);
   }
 
   init {
@@ -36,7 +44,13 @@ class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactAppl
     View.inflate(ctx, R.layout.video_layout, this)
     val droneVideo: TextureView = findViewById(R.id.video_previewer_surface);
     droneVideo.surfaceTextureListener = this;
-    VideoFeeder.getInstance().primaryVideoFeed.addVideoDataListener(videoDataListener)
+    if (listenerSetup == false) {
+      listenerSetup = true
+      Log.d(TAG, "Setup listener for video data")
+      VideoFeeder.getInstance().primaryVideoFeed.addVideoDataListener(videoDataListener)
+    } else {
+      Log.v(TAG, "Listener already setup for video data")
+    }
   }
 
   private var mCodecManager: DJICodecManager? = null;
