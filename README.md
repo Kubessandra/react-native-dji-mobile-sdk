@@ -45,6 +45,14 @@ TODO
 />
 ```
 
+## Known issues
+
+Video view is not working well on x86 phones [dji issue](https://developer.dji.com/document/122b5969-d64d-4752-8452-400c41240aa5)
+
+> Mobile SDK 4.7 and later versions are incompatible with x86 devices: Since v4.7, Mobile SDK has included FFMpeg lib to provide the transcoded video feed, but FFMpeg x86 so files will lead to the runtime crash when the target API of APP is larger than 23(included).
+
+
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.

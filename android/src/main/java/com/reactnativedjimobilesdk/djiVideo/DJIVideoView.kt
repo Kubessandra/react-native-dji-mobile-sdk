@@ -25,13 +25,11 @@ class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactAppl
 
   private val reactEventEmitter = ReactEventEmitter(callerContext);
   private val videoDataListener = VideoFeeder.VideoDataListener { bytes: ByteArray, size: Int ->
-    Log.v(TAG, "Receive data from video listener")
     if (mCodecManager == null) {
       Log.e(TAG, "No codec manager available")
     }
     val params = Arguments.createMap().apply {
       val encodedString = Base64.encodeToString(bytes, 0, size, Base64.NO_WRAP)
-      val id = UUID.randomUUID().toString()
       putString("bufferString", encodedString)
       putInt("size", size)
     }
@@ -40,34 +38,39 @@ class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactAppl
   }
 
   init {
+    Log.d(TAG, "Init DJIVideoView")
     Helper.install(ctx.currentActivity?.application)
     View.inflate(ctx, R.layout.video_layout, this)
     val droneVideo: TextureView = findViewById(R.id.video_previewer_surface);
     droneVideo.surfaceTextureListener = this;
-    if (listenerSetup == false) {
+    if (!listenerSetup) {
       listenerSetup = true
       Log.d(TAG, "Setup listener for video data")
       VideoFeeder.getInstance().primaryVideoFeed.addVideoDataListener(videoDataListener)
     } else {
-      Log.v(TAG, "Listener already setup for video data")
+      Log.d(TAG, "Listener already setup for video data")
     }
   }
 
   private var mCodecManager: DJICodecManager? = null;
 
   override fun onSurfaceTextureAvailable(surface: SurfaceTexture, width: Int, height: Int) {
+    Log.d(TAG, "Surface texture available")
     if (mCodecManager == null) {
-      Log.v(TAG, "Create DJI Codec")
+      Log.d(TAG, "Create DJI Codec")
       mCodecManager = DJICodecManager(ctx, surface, width, height);
     }
   }
 
   override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture, width: Int, height: Int) {
-    this.mCodecManager?.cleanSurface();
-    this.mCodecManager = DJICodecManager(ctx, surface, width, height);
+    Log.d(TAG, "Surface texture size change")
+    mCodecManager?.cleanSurface();
+    mCodecManager?.destroyCodec();
+    mCodecManager = DJICodecManager(ctx, surface, width, height);
   }
 
   override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+    Log.d(TAG, "Surface texture destroyed")
     mCodecManager?.destroyCodec();
     mCodecManager = null;
     return false;
@@ -77,8 +80,10 @@ class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactAppl
   }
 
   override fun onDetachedFromWindow() {
+    Log.d(TAG, "onDetachedFromWindow")
     super.onDetachedFromWindow();
     VideoFeeder.getInstance().primaryVideoFeed.destroy();
+    listenerSetup = false;
     mCodecManager?.destroyCodec();
   }
 }
