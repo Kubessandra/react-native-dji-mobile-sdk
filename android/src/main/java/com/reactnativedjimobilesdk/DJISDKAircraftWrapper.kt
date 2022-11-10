@@ -1,16 +1,20 @@
 package com.reactnativedjimobilesdk
 
-import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
+import android.util.Base64
+import android.util.Log
+import com.facebook.react.bridge.*
 import dji.common.error.DJIError
 import dji.common.util.CommonCallbacks
 import dji.sdk.camera.Camera
+import dji.sdk.camera.VideoFeeder
 import dji.sdk.products.Aircraft
 import dji.sdk.sdkmanager.DJISDKManager
+import java.util.*
+import kotlin.concurrent.schedule
 
 class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
+  private val reactEventEmitter = ReactEventEmitter(reactContext);
+
   override fun getName(): String {
     return "DJISDKAircraftWrapper"
   }
@@ -20,6 +24,7 @@ class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContex
       val product = DJISDKManager.getInstance().product ?: return null
       return product.camera
     }
+    private var subscribeToVideo = false;
   }
 
   private fun retrieveAircraft(): Aircraft {
@@ -27,6 +32,27 @@ class DJISDKAircraftWrapper(reactContext: ReactApplicationContext) : ReactContex
     val product = sdkManager.product
     if (product is Aircraft) return product
     throw Exception("The product is not an Aircraft")
+  }
+
+  // TODO extract this to be used with DJIVideoView also
+  @ReactMethod
+  fun startVideoSubscribe(promise: Promise) {
+    if (!subscribeToVideo) {
+      subscribeToVideo = true
+      Log.d(TAG, "Setup listener for video data")
+      VideoFeeder.getInstance().primaryVideoFeed.addVideoDataListener { bytes: ByteArray, size: Int ->
+        val params = Arguments.createMap().apply {
+          val encodedString = Base64.encodeToString(bytes, 0, size, Base64.NO_WRAP)
+          putString("bufferString", encodedString)
+          putInt("size", size)
+        }
+        // TODO IF we add the DJIView + this, there will double data
+        reactEventEmitter.sendEvent(ReactEventEmitter.Event.NEW_VIDEO_FRAME, params);
+      }
+    } else {
+      Log.d(TAG, "Listener already setup for video data")
+    }
+    promise.resolve(true);
   }
 
   @ReactMethod

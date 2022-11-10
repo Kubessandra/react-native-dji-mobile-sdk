@@ -1,7 +1,6 @@
 package com.reactnativedjimobilesdk
 import android.util.Log
 import com.facebook.react.bridge.*
-import com.secneo.sdk.Helper
 import dji.common.error.DJIError
 import dji.common.error.DJISDKError
 import dji.sdk.base.BaseComponent
@@ -22,14 +21,15 @@ class DJISDKManagerWrapper(reactContext: ReactApplicationContext) : ReactContext
   fun registerApp(promise: Promise) {
     // NEED TO BE CALL FIRST BEFORE ALLLLLLLL
     // TODO Call it just after constructor
-    Helper.install(currentActivity?.application)
+    com.secneo.sdk.Helper.install(currentActivity?.application)
     // TODO Check if already registering an APP
     Log.d(TAG, "Register APP")
     val sdkManager = DJISDKManager.getInstance()
-    sdkManager.registerApp(reactApplicationContext,
+    sdkManager.registerApp(reactApplicationContext.applicationContext,
       object : DJISDKManager.SDKManagerCallback {
         override fun onRegister(djiError: DJIError?) {
           if (djiError == DJISDKError.REGISTRATION_SUCCESS) {
+            Log.d(TAG, "Registration Success")
             reactEventEmitter.sendEvent(ReactEventEmitter.Event.REGISTRATION_SUCCESS, null)
             promise.resolve(true)
           } else {

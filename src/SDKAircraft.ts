@@ -30,4 +30,8 @@ export class SDKAircraft {
   async startLanding(): Promise<void> {
     await DJISDKAircraftWrapper.startLanding();
   }
+
+  async startVideoSubscribe(): Promise<void> {
+    await DJISDKAircraftWrapper.startVideoSubscribe();
+  }
 }

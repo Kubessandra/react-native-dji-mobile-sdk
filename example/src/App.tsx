@@ -20,6 +20,8 @@ type RootStackParamList = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const NoDroneError = () => <Text style={{ color: 'black' }}>No Drone</Text>;
+
 export default function App() {
   const [drone, setDrone] = useState<SDKDrone | null>(null);
   useSDKEventListeners();
@@ -29,12 +31,12 @@ export default function App() {
   }, [drone, setDrone]);
 
   const ControlNav = useCallback(() => {
-    if (!drone) return <Text>No Drone</Text>;
+    if (!drone) return <NoDroneError />;
     return <Control drone={drone} />;
   }, [drone]);
 
   const InfosNav = useCallback(() => {
-    if (!drone) return <Text>No Drone</Text>;
+    if (!drone) return <NoDroneError />;
     return <Infos drone={drone} />;
   }, [drone]);
 

@@ -31,14 +31,17 @@ const Infos = (props: InfosProps) => {
       <Text
         style={{
           margin: 16,
+          color: 'black',
         }}
       >
         Drone Infos
       </Text>
       <View>
-        <Text>Is Connected {String(isConnected)}</Text>
-        <Text>DroneID {droneID}</Text>
-        <Text>DroneModel {droneModel}</Text>
+        <Text style={{ color: 'black' }}>
+          Is Connected {String(isConnected)}
+        </Text>
+        <Text style={{ color: 'black' }}>DroneID {droneID}</Text>
+        <Text style={{ color: 'black' }}>DroneModel {droneModel}</Text>
       </View>
     </View>
   );

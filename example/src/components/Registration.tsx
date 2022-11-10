@@ -17,6 +17,7 @@ const Registration = (props: RegistrationProps) => {
       await sdkManager.startConnectionToProduct();
       console.log('Connection success');
       const newDrone = await sdkManager.getProduct();
+      await newDrone.startVideoSubscribe();
       onDroneConnected(newDrone);
     } catch (e) {
       Toast.show({

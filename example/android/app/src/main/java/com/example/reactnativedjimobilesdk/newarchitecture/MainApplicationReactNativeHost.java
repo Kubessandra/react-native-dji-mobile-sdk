@@ -18,6 +18,7 @@ import com.facebook.react.fabric.ComponentFactory;
 import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
+import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
 import com.example.reactnativedjimobilesdk.BuildConfig;
 import com.example.reactnativedjimobilesdk.newarchitecture.components.MainComponentsRegistry;
@@ -103,10 +104,10 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
                         reactInstanceManager.getOrCreateViewManagers(reactApplicationContext));
 
                 return new FabricJSIModuleProvider(
-                    reactApplicationContext,
-                    componentFactory,
-                    new EmptyReactNativeConfig(),
-                    viewManagerRegistry);
+                  reactApplicationContext,
+                  componentFactory,
+                  ReactNativeConfig.DEFAULT_CONFIG,
+                  viewManagerRegistry);
               }
             });
         return specs;
