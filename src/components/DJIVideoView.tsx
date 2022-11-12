@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   view: {
     height: 1920,
-    widht: 1080,
+    width: 1080,
     backgroundColor: 'gray',
   },
 });

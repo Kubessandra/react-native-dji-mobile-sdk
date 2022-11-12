@@ -2,6 +2,7 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 import { LINKING_ERROR } from './constant';
 
 export interface EventList {
+  // Need to have the DJIVideoView mounted
   NEW_VIDEO_FRAME: {
     bufferString: string;
     size: number;

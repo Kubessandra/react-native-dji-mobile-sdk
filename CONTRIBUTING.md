@@ -19,7 +19,6 @@ Add your SDK Api key to the test example:
 </resources>
 ```
 
-
 ## Development workflow
 
 To get started with the project, run `yarn` in the root directory to install the required dependencies for each package:
@@ -50,7 +49,6 @@ To run the example app on iOS:
 yarn example ios
 ```
 
-
 Make sure your code passes TypeScript and ESLint. Run the following to verify:
 
 ```sh
@@ -69,9 +67,11 @@ Remember to add tests for your change if possible. Run the unit tests by:
 ```sh
 yarn test
 ```
+
 To edit the Objective-C files, open `example/ios/DjiMobileSdkExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > react-native-dji-mobile-sdk`.
 
 To edit the Kotlin files, open `example/android` in Android studio and find the source files at `reactnativedjimobilesdk` under `Android`.
+
 ### Commit message convention
 
 We follow the [conventional commits specification](https://www.conventionalcommits.org/en) for our commit messages:
@@ -129,8 +129,9 @@ When you're sending a pull request:
 
 ### Known issues in the package:
 
-1. If you have an error like this `Process: com.example.reactnativedjimobilesdk, PID: 15122
-    java.lang.NoClassDefFoundError: Failed resolution of: Ldji/sdk/sdkmanager/DJISDKManager;` you need to run the Helper before requesting anything
+1. If you have an error like this `Process: com.example.reactnativedjimobilesdk, PID: 15122 java.lang.NoClassDefFoundError: Failed resolution of: Ldji/sdk/sdkmanager/DJISDKManager;` you need to run the Helper before requesting anything
+
+2. While using the `DJI SDK` you can encounter some `NoClassDefFoundError` with `DexPathList`, you can run the call to the SDK in another Thread.
 
 ## Code of Conduct
 

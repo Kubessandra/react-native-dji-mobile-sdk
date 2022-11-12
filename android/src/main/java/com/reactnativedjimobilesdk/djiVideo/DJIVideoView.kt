@@ -19,6 +19,7 @@ import com.secneo.sdk.Helper
 
 // TODO Reuse the same VideoFeeder for View and Drone
 class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactApplicationContext): RelativeLayout(ctx), TextureView.SurfaceTextureListener {
+  private val reactEventEmitter = ReactEventEmitter(callerContext);
   companion object {
     private var listenerSetup = false;
   }
@@ -27,6 +28,12 @@ class DJIVideoView(private val ctx: ThemedReactContext, callerContext: ReactAppl
     if (mCodecManager == null) {
       Log.e(TAG, "No codec manager available")
     }
+    val params = Arguments.createMap().apply {
+      val encodedString = Base64.encodeToString(bytes, 0, size, Base64.NO_WRAP)
+      putString("bufferString", encodedString)
+      putInt("size", size)
+    }
+    reactEventEmitter.sendEvent(ReactEventEmitter.Event.NEW_VIDEO_FRAME, params);
     mCodecManager?.sendDataToDecoder(bytes, size);
   }
 
